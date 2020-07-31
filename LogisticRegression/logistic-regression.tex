@@ -1,0 +1,113 @@
+\documentclass{article}
+
+
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}		% Can be removed after putting your text content
+\usepackage{graphicx}
+
+
+
+\title{A detailed derivation of Logistic Regression}
+
+%\date{September 9, 1985}	% Here you can change the date presented in the paper title
+%\date{} 					% Or removing it
+
+\author{
+	Junaid H. Rahim\\
+	School of Computer Engineering, KIIT University\\
+	\texttt{junaidrahim5a@gmail.com} \\
+}
+
+% Uncomment to override  the `A preprint' in the header
+
+\renewcommand{\headeright}{Personal Notes}
+\renewcommand{\undertitle}{Personal Notes on Machine Learning}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+	The following is a detailed derivation of Logistic Regression. It's simple algorithm  that can be used for binary classification tasks. The algorithm on its own is pretty simple, we take a linear combination of the input features with a weight vector and pass that into a sigmoid function. As the sigmoid function squishes values passed between 0 and 1, we use that as a measure of the probability of truthness $y=1$. For training the model, we use gradient descent to find the weight vector as such that a specified loss function is at its minimum. The main objective of this document is to clearly describe the mathematics behind logistic regression.
+	
+\end{abstract}
+
+
+% keywords can be removed
+\keywords{Logistic Regression \and Machine Learning}
+
+
+\section{Derivation}
+
+Given that we have $m$ training examples with $n$ features each
+
+$$X = \{\textbf{x}_1, \textbf{x}_2, \textbf{x}_3, ..., \textbf{x}_m\} \; \; \; \; \forall \; \textbf{x}_i \in \mathbb{R}^n$$
+$$\textbf{y} = \{y_1, y_2, y_3, ... , y_m\} \; \; \; \; \forall \;\; y_i \in \{0,1\}$$
+
+
+We can think of $X$ as a $\mathbb{R}^{n \times m}$ matrix and $Y$ as a $\mathbb{R}^m$ vector holding the ground truths for each training sample. Now we define a weight vector $\textbf{w} \in \mathbb{R}^n$ and a scalar value $\textbf{b} \in \mathbb{R}^m$ which is also known as the \textit{bias} vector
+
+The sigmoid function is defined as
+
+$$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+
+The predicted value $\hat \textbf{y} \in \mathbb{R}^m$ is specified as
+
+$$\hat \textbf{y} = \sigma(\textbf{w}^TX + \textbf{b})$$
+
+Here the sigmoid function is applied to all the elements of the vector, thus we get the $m$ sized vector $\hat \textbf{y}$ $\; \; \forall \; \hat y_i \in [0,1]$
+
+
+The loss function for a single training sample is expressed as, 
+
+$$Loss(y , \hat y) = -y \log \hat y - (1-y) \log (1-\hat y)$$
+
+For the entire training set,
+
+$$Cost \; = \; J(\textbf{w}, \textbf{b}) = \frac{1}{m} \sum_{i=1}^{m}  Loss(\textbf{y}^{(i)}, \hat \textbf{y}^{(i)})$$
+
+$$J(\textbf{w}, \textbf{b}) = -\frac{1}{m} \sum_{i=1}^{m} \; \textbf{y}^{(i)} \log \hat \textbf{y}^{(i)} + (1-\textbf{y}^{(i)}) \log (1-\hat \textbf{y}^{(i)})$$
+
+Substituting the value of $\hat \textbf{y}$
+
+$$J(\textbf{w}, \textbf{b}) = -\frac{1}{m} \sum_{i=1}^{m} \; \textbf{y}^{(i)} \log \sigma(\textbf{w}^TX^{(i)} + \textbf{b}^{(i)}) + (1-\textbf{y}^{(i)}) \log (1- \sigma(\textbf{w}^TX^{(i)} + \textbf{b}^{(i)}))$$
+
+The derivative $\sigma'(z) = \sigma(z).(\sigma(z) - 1)$. Therefore the derivative 
+
+$$\frac{\partial J(\textbf{w}, \textbf{b})}{\partial \textbf{w}} = -\frac{1}{m} \sum_{i=1}^{m} \; \{ \textbf{y}^{(i)} [\sigma(\textbf{w}^TX^{(i)} + \textbf{b}^{(i)}) - 1] + (1-\textbf{y}^{(i)}) \; \sigma(\textbf{w}^TX^{(i)} + \textbf{b}^{(i)})\} X^{(i)}$$
+
+$$\frac{\partial J(\textbf{w}, \textbf{b})}{\partial \textbf{w}} = -\frac{1}{m} \sum_{i=1}^{m} \; \{ \textbf{y}^{(i)} \; (\hat \textbf{y} - 1) + (1-\textbf{y}^{(i)}) \; \hat \textbf{y}\} X^{(i)}$$
+
+$$\frac{\partial J(\textbf{w}, \textbf{b})}{\partial \textbf{w}} = -\frac{1}{m} \sum_{i=1}^{m} \; \{ \textbf{y}^{(i)} \hat \textbf{y}^{(i)} - \textbf{y}^{(i)} + \hat \textbf{y}^{(i)} -\textbf{y}^{(i)} \; \hat \textbf{y}^{(i)} \} X^{(i)}$$
+
+$$\frac{\partial J(\textbf{w}, \textbf{b})}{\partial \textbf{w}} = -\frac{1}{m} \sum_{i=1}^{m} \; \{\hat \textbf{y}^{(i)} - \textbf{y}^{(i)} \} X^{(i)}$$
+
+Similarly, we can calculate, as the derivative of \textbf{b} is 1
+
+$$\frac{\partial J(\textbf{w}, \textbf{b})}{\partial \textbf{b}} = -\frac{1}{m} \sum_{i=1}^{m} \; 
+\hat \textbf{y}^{(i)} - \textbf{y}^{(i)}$$
+
+The Gradient Descent optimization step now is,
+
+$$\textbf{w} := \textbf{w} - \alpha \frac{\partial J}{\partial \textbf{w}}$$
+
+$$\textbf{b} := \textbf{b} - \alpha \frac{\partial J}{\partial \textbf{b}}$$
+
+Where $\alpha$ is the learning rate usually set to $10^{-3}$
+
+\section{Conclusion}
+
+These formulae precisely explain the entire logistic regression algorithm.
+
+
+\end{document}

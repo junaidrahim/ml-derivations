@@ -1,0 +1,99 @@
+\documentclass{article}
+
+
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}		% Can be removed after putting your text content
+\usepackage{graphicx}
+
+
+
+\title{A detailed derivation of Linear Regression}
+
+%\date{September 9, 1985}	% Here you can change the date presented in the paper title
+%\date{} 					% Or removing it
+
+\author{
+	Junaid H. Rahim\\
+	School of Computer Engineering, KIIT University\\
+	\texttt{junaidrahim5a@gmail.com} \\
+}
+
+% Uncomment to override  the `A preprint' in the header
+
+\renewcommand{\headeright}{Personal Notes}
+\renewcommand{\undertitle}{Personal Notes on Machine Learning}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+	The following is a detailed derivation of the linear regression algorithm usually used to model linear functions. In Linear Regression, a linear combination of the input vector and a weight vector is taken and then a bias element is added. These weights are then used to predict a real value from an input vector. For training the model, we use gradient descent to find the weight vector as such that a specified loss function is at its minimum. The main objective of this document is to clearly describe the mathematics behind linear regression.
+\end{abstract}
+
+
+% keywords can be removed
+\keywords{Logistic Regression \and Machine Learning}
+
+
+\section{Derivation}
+
+Given that we have $m$ training examples with $n$ features each
+
+$$X = \{\textbf{x}_1, \textbf{x}_2, \textbf{x}_3, ..., \textbf{x}_m\} \; \; \; \; \forall \; \textbf{x}_i \in \mathbb{R}^n$$
+$$\textbf{y} = \{y_1, y_2, y_3, ... , y_m\} \; \; \; \; \forall \;\; y_i \in \mathbb{R}$$
+
+
+We can think of $X$ as a $\mathbb{R}^{n \times m}$ matrix and $Y$ as a $\mathbb{R}^m$ vector holding the predicted values for each training sample. Now we define a weight vector $\textbf{w} \in \mathbb{R}^n$ and a scalar value $\textbf{b} \in \mathbb{R}^m$ which is also known as the \textit{bias} vector
+
+The predicted value $\hat \textbf{y} \in \mathbb{R}$ is specified as
+
+$$\hat \textbf{y} = \textbf{w}^TX + \textbf{b}$$
+
+The loss function for a single training sample is expressed as, 
+
+$$Loss(y , \hat y) = (\hat y - y)^2$$
+
+For the entire training set,
+
+$$Cost \; = \; J(\textbf{w}, \textbf{b}) = \frac{1}{m} \sum_{i=1}^{m}  Loss(\textbf{y}^{(i)}, \hat \textbf{y}^{(i)})$$
+
+$$J(\textbf{w}, \textbf{b}) = \frac{1}{2m} \sum_{i=1}^{m} \; (\hat \textbf{y}^{(i)} - \textbf{y}^{(i)})^2$$
+
+Substituting the value of $\hat \textbf{y}$
+
+$$J(\textbf{w}, \textbf{b}) = \frac{1}{2m} \sum_{i=1}^{m} \; (\textbf{w}^TX^{(i)} + \textbf{b} - \textbf{y}^{(i)})^2$$
+
+Therefore the derivative,
+
+$$\frac{\partial J(\textbf{w},\textbf{b})}{\partial \textbf{w}} = \frac{1}{m} \sum_{i=1}^{m} \; (\textbf{w}^TX^{(i)} + \textbf{b} - \textbf{y}^{(i)}) \; X^{(i)}$$
+
+$$\frac{\partial J(\textbf{w},\textbf{b})}{\partial \textbf{w}} = \frac{1}{m} \sum_{i=1}^{m} \; (\hat \textbf{y}^{(i)} - \textbf{y}^{(i)}) \; X^{(i)}$$
+
+$$\frac{\partial J(\textbf{w},\textbf{b})}{\partial \textbf{b}} = \frac{1}{m} \sum_{i=1}^{m} \; (\hat \textbf{y}^{(i)} - \textbf{y}^{(i)})$$
+
+The Gradient Descent optimization step now is,
+
+$$\textbf{w} := \textbf{w} - \alpha \frac{\partial J}{\partial \textbf{w}}$$
+
+$$\textbf{b} := \textbf{b} - \alpha \frac{\partial J}{\partial \textbf{b}}$$
+
+Where $\alpha$ is the learning rate usually set to $10^{-3}$
+
+\section{Conclusion}
+
+These formulae precisely explain the entire linear regression algorithm.
+
+
+
+\end{document}
